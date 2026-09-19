@@ -63,7 +63,7 @@ function probe(address) {
 async function main() {
   line();
   line('='.repeat(62));
-  line('  溟月 · 网关网络自检');
+  line('  DSH 手机端 · 网关网络自检');
   line('='.repeat(62));
 
   // ---- 1. listening ----

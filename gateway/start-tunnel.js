@@ -64,7 +64,7 @@ async function main() {
 
   line();
   line('='.repeat(62));
-  line('  溟月 · 手机隧道（ngrok）');
+  line('  DSH 手机端 · 手机隧道（ngrok）');
   line('='.repeat(62));
   line();
 

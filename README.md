@@ -1,4 +1,4 @@
-# 溟月 · 手机端 DeepSeek Harness
+# DSH 手机端 · DeepSeek Harness
 
 用 ngrok 把电脑上的 DeepSeek Harness 搬到手机浏览器或者apk里。
 

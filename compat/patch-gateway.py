@@ -70,7 +70,7 @@ def main():
                '<style data-mingyue-narrow>${MINGYUE_CSS}</style>`')
 
     new = (
-        '\t\t// ---- 溟月手机端注入层（2026-09-19）----\n'
+        '\t\t// ---- DSH 手机端注入层（2026-09-19）----\n'
         '\t\t// ① polyfill：手机 WebView 缺 Promise.withResolvers / AbortSignal.any 等\n'
         '\t\t// ② 窄屏 CSS：修正 DSH 设置对话框在小屏下被挤成竖排的问题，并把鲸鱼默认缩小\n'
         '\t\t// 顺序关键：必须排在 DSH 自己注入的脚本之前，否则那些脚本先跑就先报错。\n'

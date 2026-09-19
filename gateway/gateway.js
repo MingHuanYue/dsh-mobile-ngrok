@@ -152,7 +152,7 @@ function loginPage({ badToken = false } = {}) {
   return `<!doctype html>
 <html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>溟月 · ${title}</title>
+<title>DSH 手机端 · ${title}</title>
 <style>
   :root { color-scheme: dark; }
   body { margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
@@ -464,7 +464,7 @@ that token as the password in the app's settings (username is ignored).`);
 
   const addrs = localAddresses();
   console.log('');
-  console.log('  溟月 · DSH 手机网关');
+  console.log('  DSH 手机端 · DSH 手机网关');
   console.log('  --------------------------------------------------');
   console.log(`  DSH      : ${cfg.dsh}`);
   console.log(`  listening: ${cfg.host}:${cfg.port}`);

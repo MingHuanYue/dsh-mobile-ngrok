@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">溟月</string>
+    <string name="app_name">DSH 手机端</string>
     <string name="settings_title">设置</string>
     <string name="hint_url">192.168.1.100:3081</string>
     <string name="label_url">电脑地址（网关，端口默认 3081）</string>

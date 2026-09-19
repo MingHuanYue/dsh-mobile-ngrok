@@ -188,7 +188,7 @@ public class SettingsActivity extends Activity {
 
     private String about() {
         StringBuilder sb = new StringBuilder();
-        sb.append("溟月 · DSH 手机端  v").append(BuildConfig.VERSION_NAME).append("\n");
+        sb.append("DSH 手机端 · DSH 手机端  v").append(BuildConfig.VERSION_NAME).append("\n");
         sb.append("build ").append(BuildConfig.BUILD_STAMP).append("\n\n");
         sb.append("它本身不包含任何智能——只是一个忠实的窗口，把电脑上那个 DSH 搬到手机上。\n");
         sb.append("所以电脑上的会话、文件、工具、记忆，手机上看到的是同一份。\n\n");
