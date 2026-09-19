@@ -131,7 +131,7 @@ internal static class GatewayConsole
     private static Form BuildForm()
     {
         Form f = new Form();
-        f.Text = "普瑞赛斯 · 手机网关控制台";
+        f.Text = "手机网关控制台";
         f.ClientSize = new Size(720, 600);
         f.MinimumSize = new Size(640, 520);
         f.StartPosition = FormStartPosition.CenterScreen;
