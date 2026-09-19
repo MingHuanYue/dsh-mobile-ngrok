@@ -10,11 +10,40 @@ const os = require("node:os");
 // 路径不写死，跟 compat/paths.py 一套规则：
 // 工作区根优先读 MINGYUE_WS，否则从本文件位置往上推两级。
 const WS = process.env.MINGYUE_WS || path.dirname(path.dirname(__dirname));
-const BT = path.join(WS, "_buildtools");
+
+/** 找构建工具目录。跟 paths.py 一样：找不到就明确报错，不拿错路径硬跑。 */
+function findBuildtools() {
+  const env = process.env.MINGYUE_BUILDTOOLS;
+  if (env) {
+    if (fs.existsSync(env)) return env;
+    console.error("警告：MINGYUE_BUILDTOOLS 指向的目录不存在，改为自动查找。\n    " + env);
+  }
+  const cands = [
+    path.join(WS, "_buildtools"),
+    path.join(WS, "buildtools"),
+    path.join(path.dirname(__dirname), "_buildtools"),
+  ];
+  for (const c of cands) if (fs.existsSync(c)) return c;
+  console.error(
+    "找不到构建工具目录（_buildtools）。\n" +
+      "本仓库不附带它，构建脚本是给改代码的人用的，普通使用不需要。\n\n" +
+      "要改代码的话，把它放到工作区根目录，或用环境变量指过去：\n" +
+      '    set MINGYUE_BUILDTOOLS=D:\\你的目录\\_buildtools\n\n' +
+      "已试过：\n" + cands.map((c) => "    " + c).join("\n")
+  );
+  process.exit(2);
+}
+
+const BT = findBuildtools();
 
 /** 找 DSH 的包目录：优先 DSH_NM，否则依次试几个常见的安装位置。 */
 function findDshPackages() {
-  if (process.env.DSH_NM && fs.existsSync(process.env.DSH_NM)) return process.env.DSH_NM;
+  const env = process.env.DSH_NM;
+  if (env) {
+    if (fs.existsSync(env)) return env;
+    // 设了但指错了要说出来，否则用户以为生效了、实际用的是别的路径
+    console.error("警告：DSH_NM 指向的目录不存在，改为自动查找。\n    " + env);
+  }
   const home = os.homedir();
   const cands = [
     path.join(home, ".dsh", "profiles", "node_modules", "@deepseek-ai"),
@@ -27,11 +56,13 @@ function findDshPackages() {
     }
   }
   for (const c of cands) if (fs.existsSync(c)) return c;
-  throw new Error(
-    "找不到 DSH 的安装位置。请设置环境变量 DSH_NM，例如：\n" +
-      "  set DSH_NM=%USERPROFILE%\\.dsh\\profiles\\node_modules\\@deepseek-ai\n" +
-      "试过这些位置：\n" + cands.map((c) => "  " + c).join("\n")
+  console.error(
+    "找不到 DSH 的安装位置。这几个脚本要改你电脑上已经装好的 DSH。\n\n" +
+      "DSH 装在别处的话，用环境变量指过去：\n" +
+      "    set DSH_NM=%USERPROFILE%\\.dsh\\profiles\\node_modules\\@deepseek-ai\n\n" +
+      "试过这些位置：\n" + cands.map((c) => "    " + c).join("\n")
   );
+  process.exit(2);
 }
 
 /** esbuild 延迟加载，位置不固定。 */
