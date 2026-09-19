@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  尺寸档位 2：屏幕宽度 ≥ 400dp（普通大屏手机、内折屏、小折叠展开）。
+
+  在基线基础上整体放大一点 —— 屏幕宽了，同样的字号会显得偏小、
+  点击区域也更容易按错。只覆写需要变的项，其余继承 values/dimens.xml。
+-->
+<resources>
+    <dimen name="page_pad_h">22dp</dimen>
+    <dimen name="page_pad_top">22dp</dimen>
+    <dimen name="page_pad_bottom">34dp</dimen>
+    <dimen name="card_pad">16dp</dimen>
+    <dimen name="card_pad_h">14dp</dimen>
+    <dimen name="field_gap">14dp</dimen>
+    <dimen name="field_pad_h">14dp</dimen>
+
+    <dimen name="text_title">23sp</dimen>
+    <dimen name="text_section">14sp</dimen>
+    <dimen name="text_label">13sp</dimen>
+    <dimen name="text_input">15sp</dimen>
+    <dimen name="text_button">16sp</dimen>
+    <dimen name="text_body">14sp</dimen>
+    <dimen name="text_about">13sp</dimen>
+
+    <dimen name="control_h">52dp</dimen>
+</resources>

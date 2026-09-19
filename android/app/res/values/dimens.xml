@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  尺寸基线（窄屏手机 / 小折叠外屏，< 400dp 宽）。
+
+  这些值不是写死在布局里的，而是按屏幕宽度分档：
+    values/                  < 400dp   手机外屏、小折叠
+    values-sw400dp/          ≥ 400dp   普通大屏手机、内折屏
+    values-sw600dp/          ≥ 600dp   平板、横屏
+
+  这样同一个 APK 在小屏上字不至于挤成一团，在大屏上也不会小得可怜。
+  加一档只需新建 values-swXXXdp/dimens.xml，布局文件不用动。
+-->
+<resources>
+    <!-- 屏幕内边距 -->
+    <dimen name="page_pad_h">16dp</dimen>
+    <dimen name="page_pad_top">16dp</dimen>
+    <dimen name="page_pad_bottom">28dp</dimen>
+    <dimen name="card_pad">12dp</dimen>
+    <dimen name="card_pad_h">10dp</dimen>
+    <dimen name="field_gap">12dp</dimen>
+    <dimen name="field_pad_h">12dp</dimen>
+
+    <!-- 字号 -->
+    <dimen name="text_title">21sp</dimen>
+    <dimen name="text_section">13sp</dimen>
+    <dimen name="text_label">12sp</dimen>
+    <dimen name="text_input">14sp</dimen>
+    <dimen name="text_button">15sp</dimen>
+    <dimen name="text_body">13sp</dimen>
+    <dimen name="text_about">12sp</dimen>
+
+    <!-- 控件高度 -->
+    <dimen name="control_h">48dp</dimen>
+
+    <!--
+      内容最大宽度：只在屏幕比它还宽时才生效（横屏、平板、展开的折叠屏）。
+      竖屏手机上这个值不起作用，内容照旧铺满。
+    -->
+    <dimen name="content_max_width">560dp</dimen>
+
+    <!--
+      系统栏留白。默认 0：老系统（API < 35）不强制 edge-to-edge，系统栏不占内容区。
+      values-v35 会覆盖成非 0 —— Android 15 起目标 SDK ≥ 35 会被强制 edge-to-edge，
+      不留白的话标题会被状态栏盖住、底部按钮被导航条盖住。
+    -->
+    <dimen name="sys_top_padding">0dp</dimen>
+    <dimen name="sys_bottom_padding">0dp</dimen>
+</resources>

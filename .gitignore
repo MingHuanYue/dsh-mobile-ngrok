@@ -1,0 +1,70 @@
+# ---- 密钥与凭据：绝对不许进仓库 ----
+# ngrok 认证令牌（你的账号凭据）
+ngrok.yml
+ngrok.yaml
+*.authtoken
+# APK 签名私钥（泄露 = 别人能冒名发你的更新）
+*.keystore
+*.jks
+*.p12
+*.pfx
+# 会话密钥
+.gateway-secret
+# 通用兜底：环境文件、任何 key 文件
+.env
+.env.*
+*.key
+*.pem
+secrets.json
+gateway-console.ini
+
+# ---- 二进制 ----
+# ngrok 是第三方专有软件，不随仓库分发
+ngrok.exe
+ngrok
+# 默认不收 .exe，但自己编译出来的控制台例外
+*.exe
+!gateway/手机网关控制台.exe
+
+# ---- 构建产物 ----
+out/
+build/
+dist/
+*.apk
+*.aab
+*.idsig
+*.zip
+*.tgz
+
+# ---- 本地工具链（约 530 MB，用 setup 脚本自行获取）----
+_buildtools/
+jdk/
+sdk/
+node_modules/
+!gateway/**/node_modules/
+
+# ---- 运行时产生的日志与临时文件 ----
+*.log
+gateway-console-diag.log
+启动日志.txt
+launcher-dryrun.txt
+
+# ---- 第三方美术素材：不在 MIT 范围，擅自再分发不合适 ----
+# 详见 THIRD-PARTY-NOTICES.md
+assets/whale.png
+assets/鲸鱼娘.png
+
+# ---- 系统与编辑器 ----
+Thumbs.db
+desktop.ini
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*~
+
+# ---- Python / Node 缓存 ----
+__pycache__/
+*.pyc
+.npm/
+.npx/

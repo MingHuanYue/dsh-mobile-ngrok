@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  尺寸档位 3：屏幕宽度 ≥ 600dp（平板、手机横屏）。
+
+  这一档屏幕已经很宽，内容必须收窄居中 —— 否则输入框会被拉成一条
+  横贯全屏的长条，文字和按钮比例彻底失衡，也就是「被拉宽/压扁」。
+
+  内容最大宽度同时在这里下调到 560dp 以内（继承基线即可），
+  配合布局里的 maxWidth 让内容保持手机上的观感。
+-->
+<resources>
+    <dimen name="page_pad_h">28dp</dimen>
+    <dimen name="page_pad_top">26dp</dimen>
+    <dimen name="page_pad_bottom">40dp</dimen>
+    <dimen name="card_pad">20dp</dimen>
+    <dimen name="card_pad_h">18dp</dimen>
+    <dimen name="field_gap">16dp</dimen>
+    <dimen name="field_pad_h">16dp</dimen>
+
+    <dimen name="text_title">26sp</dimen>
+    <dimen name="text_section">15sp</dimen>
+    <dimen name="text_label">14sp</dimen>
+    <dimen name="text_input">16sp</dimen>
+    <dimen name="text_button">17sp</dimen>
+    <dimen name="text_body">15sp</dimen>
+    <dimen name="text_about">14sp</dimen>
+
+    <dimen name="control_h">56dp</dimen>
+
+    <!-- 大屏上把内容收得更紧一点，避免横跨整个屏幕 -->
+    <dimen name="content_max_width">520dp</dimen>
+</resources>

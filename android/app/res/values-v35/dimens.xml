@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+      Android 15（API 35）起，目标 SDK ≥ 35 的应用会被强制 edge-to-edge：
+      窗口延伸到状态栏和导航栏底下。不处理 inset 的话，标题会被状态栏盖住、
+      底部按钮会被导航条盖住。
+
+      这里给根容器加 padding 把系统栏的位置让出来。
+      values-v35 只会被 API 35+ 的设备读到，所以老系统完全不受影响。
+    -->
+    <dimen name="sys_top_padding">32dp</dimen>
+    <dimen name="sys_bottom_padding">32dp</dimen>
+</resources>

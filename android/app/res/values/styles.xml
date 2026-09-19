@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="@android:style/Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/bg_deep</item>
+        <item name="android:colorPrimary">@color/bg_deep</item>
+        <item name="android:colorPrimaryDark">@color/bg_deep</item>
+        <item name="android:colorAccent">@color/accent</item>
+        <item name="android:textColorPrimary">@color/text_main</item>
+        <item name="android:textColorSecondary">@color/text_dim</item>
+        <item name="android:statusBarColor">@color/bg_deep</item>
+        <item name="android:navigationBarColor">@color/bg_deep</item>
+    </style>
+
+    <!--
+      下面几个样式里的尺寸全部走 @dimen/，不写死。
+      这样 values-sw400dp / values-sw600dp 换一套值就能整体缩放，
+      布局文件一个都不用改。
+    -->
+
+    <style name="SectionTitle">
+        <item name="android:textColor">@color/accent</item>
+        <item name="android:textSize">@dimen/text_section</item>
+        <item name="android:paddingLeft">4dp</item>
+        <item name="android:paddingTop">@dimen/field_gap</item>
+        <item name="android:paddingBottom">6dp</item>
+    </style>
+
+    <style name="FieldLabel">
+        <item name="android:textColor">@color/text_dim</item>
+        <item name="android:textSize">@dimen/text_label</item>
+        <item name="android:paddingLeft">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
+    </style>
+
+    <style name="Btn">
+        <item name="android:layout_height">@dimen/control_h</item>
+        <item name="android:textColor">@color/bg_deep</item>
+        <item name="android:background">@drawable/bg_button</item>
+        <item name="android:textSize">@dimen/text_button</item>
+        <item name="android:layout_marginTop">@dimen/card_pad_h</item>
+        <item name="android:stateListAnimator">@null</item>
+    </style>
+
+    <style name="BtnGhost" parent="Btn">
+        <item name="android:textColor">@color/text_main</item>
+        <item name="android:background">@drawable/bg_button_ghost</item>
+    </style>
+
+    <!-- 输入框：高度与内边距也跟着档位走，别在各处重复写 -->
+    <style name="Input">
+        <item name="android:layout_height">@dimen/control_h</item>
+        <item name="android:background">@drawable/bg_input</item>
+        <item name="android:paddingLeft">@dimen/field_pad_h</item>
+        <item name="android:paddingRight">@dimen/field_pad_h</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">@color/text_main</item>
+        <item name="android:textColorHint">#FF58708C</item>
+        <item name="android:textSize">@dimen/text_input</item>
+    </style>
+</resources>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">溟月</string>
+    <string name="settings_title">设置</string>
+    <string name="hint_url">192.168.1.100:3081</string>
+    <string name="label_url">电脑地址（网关，端口默认 3081）</string>
+    <string name="btn_save">保存</string>
+    <string name="btn_test">测试连接</string>
+    <string name="btn_presets">本机地址</string>
+    <string name="btn_clear">清空</string>
+    <string name="label_token">访问令牌（dsh web 启动时打印的 token）</string>
+    <string name="hint_token">token= 后面那一串</string>
+    <string name="btn_paste_token">从剪贴板粘贴令牌</string>
+    <string name="label_relaxed">允许自签名证书（HTTPS 未受信任时）</string>
+    <string name="label_ua">浏览器标识（用于绕过 ngrok 免费版警告页）</string>
+    <string name="hint_ua">MingyueDSH</string>
+    <string name="empty_title">还没连上我</string>
+    <string name="empty_body">填两样东西：电脑地址（局域网 IP 或 ngrok 网址）和 dsh web 打印的令牌。\n\n地址不写 http:// 也行，我会补，HTTP 和 HTTPS 都能用。</string>
+    <string name="empty_btn">填地址</string>
+    <string name="fail_hint">超时（而不是「拒绝」）= 包发出去了但没人应。按顺序查：\n1. 手机走流量、电脑走校园网网线的话，两台设备不在同一个网络，永远连不通 —— 这种情况必须用隧道（双击 启动隧道.cmd）；\n2. 电脑上 Start-DSH.cmd（或 exe）和 启动网关.cmd 是不是都在跑；\n3. 地址端口是网关的 3081，不是 DSH 的 3080。</string>
+</resources>

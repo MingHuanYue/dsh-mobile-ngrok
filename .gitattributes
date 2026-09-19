@@ -1,0 +1,51 @@
+# ─────────────────────────────────────────────────────────────
+# 行尾规则
+#
+# 为什么必须显式声明：Windows 的 .cmd / .bat 一旦被换成 LF 行尾，
+# cmd.exe 的解析器就会错位，把命令切碎（报一堆「不是内部或外部命令」）。
+# 这个坑在本项目里踩过，所以不依赖各人本地的 core.autocrlf 设置。
+# ─────────────────────────────────────────────────────────────
+
+# Windows 批处理必须 CRLF，且必须原样检出
+*.cmd   text eol=crlf
+*.bat   text eol=crlf
+
+# PowerShell 脚本：Windows 上跑，用 CRLF 更稳
+*.ps1   text eol=crlf
+
+# 源码与文档统一 LF
+*.java  text eol=lf
+*.js    text eol=lf
+*.mjs   text eol=lf
+*.py    text eol=lf
+*.json  text eol=lf
+*.xml   text eol=lf
+*.md    text eol=lf
+*.yml   text eol=lf
+*.yaml  text eol=lf
+*.css   text eol=lf
+
+# 二进制：不要做任何换行或编码转换
+*.exe   binary
+*.apk   binary
+*.png   binary
+*.jpg   binary
+*.gif   binary
+*.wav   binary
+*.mp3   binary
+*.keystore binary
+*.jar   binary
+
+# ─────────────────────────────────────────────────────────────
+# 语言统计：让 GitHub 正确识别项目构成
+# ─────────────────────────────────────────────────────────────
+*.java  linguist-language=Java
+*.cs    linguist-language=C#
+*.js    linguist-language=JavaScript
+
+# 文档不计入语言统计
+docs/*  linguist-documentation
+*.md    linguist-documentation
+
+# .cmd / .ps1 保持可搜索，便于审阅
+*.cmd   linguist-detectable=false

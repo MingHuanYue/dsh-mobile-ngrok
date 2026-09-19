@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  主界面结构：
+
+    LinearLayout (竖直)
+      ├── FrameLayout  (weight=1，占满底栏以上的空间)
+      │     ├── FrameLayout webColumn   ← WebView 由代码创建后加进这里
+      │     │     └── LinearLayout emptyState   ← 覆盖层，和 WebView 二选一显示
+      │     ├── LinearLayout loadingBar ← 顶部 3dp 进度条，压在内容上
+      │     └── TextView toast          ← 浮动提示
+      └── FrameLayout 底栏（◀ ／ 地址 ／ ⋮）
+
+  两条踩过的坑，写在这里免得再犯：
+    ① webColumn 必须是 FrameLayout，且 WebView / emptyState 都用 match_parent。
+       曾经用 LinearLayout + weight，和 emptyState 的 match_parent 抢空间，
+       WebView 高度算成 0（或只剩半屏）—— 界面看着在、其实点不动。
+    ② 系统栏留白只加在内容区（webColumn 的 paddingTop），不能加在根容器上，
+       否则底栏会被顶起来、下面露出一条背景色。
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_deep"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/webHost"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <!-- WebView 由代码创建后 addView 到这里（index 0，压在 emptyState 下面） -->
+        <FrameLayout
+            android:id="@+id/webColumn"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="@dimen/sys_top_padding">
+
+            <WebView
+                android:id="@+id/webview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/bg_deep" />
+
+            <LinearLayout
+                android:id="@+id/emptyState"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/bg_deep"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingLeft="28dp"
+                android:paddingRight="28dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/emptyTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/empty_title"
+                    android:textColor="@color/text_main"
+                    android:textSize="@dimen/text_title"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/emptyBody"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:lineSpacingExtra="5dp"
+                    android:text="@string/empty_body"
+                    android:textColor="@color/text_dim"
+                    android:textSize="@dimen/text_body" />
+
+                <Button
+                    android:id="@+id/emptyBtn"
+                    style="@style/Btn"
+                    android:layout_width="200dp"
+                    android:layout_marginTop="26dp"
+                    android:text="@string/empty_btn" />
+            </LinearLayout>
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/loadingBar"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_gravity="top"
+            android:background="#00000000"
+            android:orientation="horizontal">
+
+            <View
+                android:id="@+id/loadingFill"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@color/accent" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/toast"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|bottom"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/bg_hint"
+            android:paddingLeft="18dp"
+            android:paddingTop="10dp"
+            android:paddingRight="18dp"
+            android:paddingBottom="10dp"
+            android:textColor="@color/text_main"
+            android:textSize="@dimen/text_body"
+            android:visibility="gone" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="#FF0C1526">
+
+        <LinearLayout
+            android:id="@+id/btnBack"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:background="?android:attr/selectableItemBackground"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="◀"
+                android:textColor="@color/accent"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/statusText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="64dp"
+            android:layout_marginRight="70dp"
+            android:ellipsize="middle"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:text=""
+            android:textColor="@color/text_dim"
+            android:textSize="11sp" />
+
+        <LinearLayout
+            android:id="@+id/btnMenu"
+            android:layout_width="64dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:background="?android:attr/selectableItemBackground"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="⋮"
+                android:textColor="@color/accent"
+                android:textSize="19sp" />
+        </LinearLayout>
+    </FrameLayout>
+</LinearLayout>
