@@ -360,6 +360,40 @@ export function createGateway({ dsh, secret, launchToken = null, verbose = false
             const list = Array.isArray(outHeaders['set-cookie']) ? outHeaders['set-cookie'] : [outHeaders['set-cookie']];
             outHeaders['set-cookie'] = list.map((c) => c.replace(/;\s*Secure/gi, ''));
           }
+          // 给静态资源补缓存头。
+          //
+          // 为什么必须在这里补：实测 DSH 的前端服务对 /assets/ 只返回
+          // content-type / transfer-encoding / vary，【没有 Cache-Control、
+          // 没有 ETag、也没有 Last-Modified】。浏览器因此无法判断资源有没有变过，
+          // 也发不了条件请求，于是每次加载都完整重下一遍。
+          //
+          // 一次冷加载约 1.17 MB（主资源 380KB + 插件包 804KB），
+          // 手机走 ngrok 隧道，这些流量全都要算额度。曾有用户一天用掉 447 MB。
+          //
+          // 三类资源都带版本标识，可以放心长期缓存：
+          //   /assets/index-BKQ_L1z6.js  文件名里的哈希是构建时算的，内容变名字就变
+          //   /plugins/...client.js&rev=7aa91ea0e9fb   rev 变了才算新版本
+          //   /dsh-whale/...             挂件的图片/脚本/音效，基本不变
+          // 首页 HTML 绝对不能缓存（它引用带哈希的资源名），/api 也不能。
+          //
+          // 实测数据（真机 CDP 抓的）：一次冷启动整页 0.91 MB，其中
+          //   /dsh-whale/image.png      250 KB   ← 同一张图还下了两遍
+          //   /dsh-whale/widget.js      206 KB
+          //   /dsh-whale/rua.gif         92 KB
+          // 挂件占了 88%，而 DSH 自身资源加了缓存头之后已经是 0 传输。
+          // DSH 给 /dsh-whale/ 发的是 no-store（严禁缓存），这里覆盖掉。
+          if (up.statusCode === 200 && (req.method === 'GET' || req.method === 'HEAD')) {
+            const p = (req.url || '').split('?')[0];
+            if (p.startsWith('/assets/')) {
+              outHeaders['cache-control'] = 'public, max-age=31536000, immutable';
+            } else if (p.startsWith('/plugins/')) {
+              outHeaders['cache-control'] = 'public, max-age=604800';
+            } else if (p.startsWith('/dsh-whale/')) {
+              // 图片/脚本/音效都不常变；用 30 天，够省流量又不怕过期太久
+              outHeaders['cache-control'] = 'public, max-age=2592000';
+              delete outHeaders['etag'];
+            }
+          }
           res.writeHead(up.statusCode ?? 502, outHeaders);
           up.pipe(res);
         },
