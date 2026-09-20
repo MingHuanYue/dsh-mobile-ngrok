@@ -68,6 +68,13 @@ public class MainActivity extends Activity {
     private final java.util.List<String> consoleErrors = new java.util.ArrayList<>();
     /** 鲸鱼挂件是否被隐藏（状态存在页面 localStorage 里）。 */
     private boolean whaleHidden = false;
+    /**
+     * 是否放行挂件每秒一次的消耗轮询。
+     *
+     * 默认关。原因见 Prefs.pollEnabled 的注释：那个轮询每秒发一次请求，
+     * 而 ngrok 免费版一个月只有 20,000 次额度，开着撑不到 6 小时。
+     */
+    private boolean pollEnabled = false;
     /** 重建 WebView 期间防重入：旧实例销毁时会再触发一次生命周期回调。 */
     private boolean rebuilding = false;
     /** WebView 的父容器（FrameLayout）；渲染进程死亡后要把新实例放回来。 */
@@ -272,7 +279,64 @@ public class MainActivity extends Activity {
      */
     private void refreshWhaleState() {
         whaleHidden = Prefs.whaleHidden(this);
+        pollEnabled = Prefs.pollEnabled(this);
         installWhaleGuard();
+        installFetchGuard();
+    }
+
+    /**
+     * 在页面里装一个 fetch 拦截器，用来开关挂件的消耗轮询。
+     *
+     * 背景（真机实测的数据）：
+     *   挂件的 whale-widget.js 里有 setInterval(pollLastTurn, 1000)，
+     *   每秒请求一次 /dsh-whale/last-turn.json，而且带 cache:'no-store'。
+     *   实测挂件开着时每分钟 63 个请求，关掉后仍有 16 个。
+     *   ngrok 免费版每月 20,000 次请求 —— 按这个频率撑不到 6 小时。
+     *
+     * 那个请求的作用只是「这轮对话花了多少钱」的提示泡泡。所以默认拦掉，
+     * 用户想要提示时在菜单里打开开关。
+     *
+     * 为什么用拦截 fetch 而不是改挂件代码：挂件是第三方包，改它会被更新覆盖；
+     * 而 App 本来就有「给页面注入常驻 JS」的机制（挂件守卫用的就是这套）。
+     */
+    private void installFetchGuard() {
+        String js = "(function(){"
+                + "var allow = " + (pollEnabled ? "true" : "false") + ";"
+                + "window.__dshwPollAllowed = allow;"
+                + "if(window.__dshwFetchPatched) return allow ? 1 : 0;"
+                + "var orig = window.fetch;"
+                + "if(typeof orig !== 'function') return -1;"
+                + "window.fetch = function(input, init){"
+                + "  try{"
+                + "    var u = typeof input === 'string' ? input : (input && input.url) || '';"
+                // 只拦这一个轮询端点，别的一概放行
+                + "    if(!window.__dshwPollAllowed && u.indexOf('/dsh-whale/last-turn.json') >= 0){"
+                // 返回一个"没有新数据"的假响应，让挂件的 pollLastTurn 安静退出
+                + "      return Promise.resolve(new Response('{\"ok\":false}',"
+                + "        {status: 200, headers: {'Content-Type': 'application/json'}}));"
+                + "    }"
+                + "  }catch(e){}"
+                + "  return orig.apply(this, arguments);"
+                + "};"
+                + "window.__dshwFetchPatched = true;"
+                + "return allow ? 1 : 0;"
+                + "})()";
+        try {
+            web.evaluateJavascript(js, (v) -> diag("fetch 守卫: pollEnabled=" + pollEnabled
+                    + " 返回=" + unquote(v)));
+        } catch (Throwable t) {
+            diag("installFetchGuard failed: " + t);
+        }
+    }
+
+    /** 开关挂件的消耗轮询。 */
+    private void togglePoll() {
+        pollEnabled = !pollEnabled;
+        Prefs.setPollEnabled(this, pollEnabled);
+        installFetchGuard();
+        showToast(pollEnabled
+                ? "已开启消耗提示（会持续发请求，注意流量额度）"
+                : "已关闭消耗轮询（不再发请求）");
     }
 
     /**
@@ -1004,6 +1068,10 @@ public class MainActivity extends Activity {
         addMenuItem(box, whaleHidden ? "显示挂件" : "关闭挂件", () -> {
             pop.dismiss();
             toggleWhale();
+        });
+        addMenuItem(box, pollEnabled ? "关闭消耗提示" : "开启消耗提示", () -> {
+            pop.dismiss();
+            togglePoll();
         });
         addMenuItem(box, "查看页面诊断", () -> {
             pop.dismiss();

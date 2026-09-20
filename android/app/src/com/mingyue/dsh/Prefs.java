@@ -16,6 +16,7 @@ public final class Prefs {
     private static final String KEY_RELAXED = "relaxed_tls";
     private static final String KEY_UA = "user_agent";
     private static final String KEY_WHALE_HIDDEN = "whale_hidden";
+    private static final String KEY_POLL_ENABLED = "whale_poll_enabled";
 
     /**
      * 附加在浏览器标识尾部的自有标记。
@@ -72,6 +73,22 @@ public final class Prefs {
 
     public static void setWhaleHidden(Context c, boolean hidden) {
         sp(c).edit().putBoolean(KEY_WHALE_HIDDEN, hidden).apply();
+    }
+
+    /**
+     * 是否允许挂件每秒轮询 /dsh-whale/last-turn.json。
+     *
+     * 默认【关】。理由：实测那个轮询是每秒一次、还带 cache:'no-store'，
+     * 挂件开着时每分钟 63 个请求——而 ngrok 免费版一个月只有 20,000 次请求，
+     * 按这个频率撑不到 6 小时。它的作用只是"这轮花了多少钱"的提示泡泡，
+     * 晚一点知道完全不影响使用。所以做成开关，用户想要时才开。
+     */
+    public static boolean pollEnabled(Context c) {
+        return sp(c).getBoolean(KEY_POLL_ENABLED, false);
+    }
+
+    public static void setPollEnabled(Context c, boolean enabled) {
+        sp(c).edit().putBoolean(KEY_POLL_ENABLED, enabled).apply();
     }
 
     public static String userAgent(Context c) {
